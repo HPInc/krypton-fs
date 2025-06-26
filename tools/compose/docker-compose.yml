@@ -1,0 +1,80 @@
+version: '3'
+services:
+  cache:
+    image: ghcr.io/hpinc/krypton/krypton-cache
+    hostname: ${CACHE}.${DOMAIN}
+    container_name: ${CACHE}.${DOMAIN}
+    ports:
+    - ${CACHE_PORT}:${CACHE_PORT}
+    networks:
+      backend:
+        aliases:
+        - ${CACHE}.${DOMAIN}
+    environment:
+    - CACHE_PASSWORD=${CACHE_PASSWORD}
+    tty: true
+  db:
+    image: ghcr.io/hpinc/krypton/krypton-db
+    hostname: ${DB}.${DOMAIN}
+    container_name: ${DB}.${DOMAIN}
+    ports:
+    - ${DB_PORT}:${DB_PORT}
+    networks:
+      backend:
+        aliases:
+        - ${DB}.${DOMAIN}
+    environment:
+    - POSTGRES_DB=${DB_NAME}
+    - POSTGRES_USER=${DB_USER}
+    - POSTGRES_PASSWORD=${DB_PASSWORD}
+    tty: true
+  sqs:
+    image: ghcr.io/hpinc/krypton/krypton-local-sqs
+    hostname: ${SQS}.${DOMAIN}
+    container_name: ${SQS}.${DOMAIN}
+    ports:
+    - ${SQS_PORT}:${SQS_PORT}
+    - ${SQS_ADMIN_PORT}:${SQS_ADMIN_PORT}
+    networks:
+      backend:
+        aliases:
+        - ${SQS}.${DOMAIN}
+    volumes:
+    - ./elasticmq.conf:/opt/elasticmq.conf:ro
+    tty: true
+  localfs:
+    image: ghcr.io/hpinc/krypton/krypton-local-storage
+    hostname: ${LOCALFS}.${DOMAIN}
+    container_name: ${LOCALFS}.${DOMAIN}
+    ports:
+    - ${LOCALFS_PORT}:${LOCALFS_PORT}
+    networks:
+      backend:
+        aliases:
+        - ${LOCALFS}.${DOMAIN}
+    environment:
+    - MINIO_ACCESS_KEY=${LOCALFS_USER}
+    - MINIO_SECRET_KEY=${LOCALFS_PASS}
+    - FS_BUCKET_NAMES=${LOCALFS_BUCKET_NAMES}
+    - SQS_HOST=${SQS}.${DOMAIN}
+    tty: true
+    depends_on:
+    - sqs
+  jwt:
+    image: ghcr.io/hpinc/krypton/krypton-jwtserver
+    hostname: ${JWT}.${DOMAIN}
+    container_name: ${JWT}.${DOMAIN}
+    environment:
+    - JWT_TOKEN_VALID_MINUTES=${JWT_TOKEN_VALID_MINUTES}
+    ports:
+    - ${JWT_PORT}:${JWT_PORT}
+    networks:
+      backend:
+        aliases:
+        - ${JWT}.${DOMAIN}
+    volumes:
+    - ./privateKey.pem:/go/bin/privateKey.pem:ro
+    tty: true
+networks:
+  backend:
+    driver: bridge

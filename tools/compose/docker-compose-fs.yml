@@ -1,0 +1,30 @@
+version: '3'
+services:
+  fs:
+    image: krypton-fs
+    hostname: ${FS}.${DOMAIN}
+    container_name: ${FS}.${DOMAIN}
+    networks:
+      backend:
+        aliases:
+        - ${FS}.${DOMAIN}
+    ports:
+    - ${FS_PORT}:${FS_PORT}
+    environment:
+    - FS_DB_SERVER=${DB}.${DOMAIN}
+    - FS_DB_PASSWORD=${DB_PASSWORD}
+    - FS_CACHE_SERVER=${CACHE}.${DOMAIN}
+    - FS_CACHE_PASSWORD=${CACHE_PASSWORD}
+    - FS_STORAGE_ENDPOINT=http://${LOCALFS}.${DOMAIN}:${LOCALFS_PORT}
+    - FS_STORAGE_BUCKET_NAMES=${LOCALFS_BUCKET_NAMES}
+    - FS_NOTIFICATION_ENDPOINT=http://${SQS}.${DOMAIN}:${SQS_PORT}
+    - FS_SERVER_AUTH_JWKS_URL=http://${JWT}.${DOMAIN}:${JWT_PORT}/api/v1/keys
+    - AWS_ACCESS_KEY_ID=${LOCALFS_USER}
+    - AWS_SECRET_ACCESS_KEY=${LOCALFS_PASS}
+    - AWS_REGION=${REGION}
+    volumes:
+    - ../../../fs:/go/src/fs
+    tty: true
+networks:
+  backend:
+    driver: bridge

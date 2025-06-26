@@ -1,0 +1,62 @@
+## Configuration file for the HP Files Service.
+
+# Server configuration.
+server:
+  host: 0.0.0.0
+  port: 1234
+  max_retry_after_seconds: 60
+  retry_after_seconds: 2
+  debug_rest_requests: false
+  auth:
+    jwks_url: http://localhost:7001/api/v1/keys
+    issuer: HP Device Token Service
+    allowed_app_ids:
+    - 8f5fafe3-a443-42a1-8ad5-e583935fbdd6
+
+# file upload notification queue configuration
+notification:
+  region: us-east-1
+  name: fs-notification
+  watch_delay: 2
+
+# Database configuration.
+database:
+  db_hostname: 127.0.0.1       # Location of the files database.
+  db_port: 5432                # Port at which the database is available.
+  user: krypton                # User account to access the database.
+  db_name: files               # Name of the database.
+  deployment_type: postgres    # Type of database (postgres, aws-rds)
+  schema: /go/bin/schema       # Location of schema migration scripts.
+  migrate_enabled: true        # Whether to enable database schema migration.
+  debug_enabled: true          # Whether to enable debug logging for database calls.
+  scavenger_enabled: false     # Whether to enable database scavenger.
+  max_open_connections: 0      # Maximum number of open SQL connections. 0 -> (num of cores * 5)
+  ssl_mode: disable            # Postgres SSL mode (disable, verify-ca OR verify-full)
+  ssl_root_cert: ''            # Name of the PEM file containing the root CA cert for SSL.
+
+# Cache configuration.
+cache:
+  enabled: true                # Whether files caching is enabled.
+  cache_hostname: fs-cache     # Location of the files cache.
+  cache_port: 6379             # Port at which the cache is available.
+  cache_db: 0                  # Redis database number to use for caching.
+
+# Storage configuration.
+storage:
+  bucket_names:
+  - mytestkrypton20221130
+  storage_hostname: localhost  # Hostname at which storage is available.
+  storage_port: 9000           # Port at which the storage service is available.
+  secure: false                # Whether to use https
+  signed_url_duration_min: 15  # Duration for which signed URLs are valid.
+  access_key_id: minioadmin
+  secret_access_key: minioadmin
+  account_id: minioadmin
+  region: eu-central-1
+
+# Logging configuration. You can specify an alternate log file path
+# using the --log-file command line flag.
+logging:
+  # Logging level to be used. Valid values of this setting are:
+  # "debug", "info", "warning", "error", "panic", "fatal"
+  log_level: debug

@@ -1,0 +1,22 @@
+version: '3'
+services:
+  cli:
+    image: ghcr.io/hpinc/krypton/krypton-cli
+    hostname: ${CLI}.${DOMAIN}
+    container_name: ${CLI}.${DOMAIN}
+    networks:
+      backend:
+        aliases:
+        - ${CLI}.${DOMAIN}
+    environment:
+    - FS_SERVER=http://${FS}.${DOMAIN}:${FS_PORT}
+    - DEVICE_TOKEN_URL=http://${JWT}.${DOMAIN}:${JWT_PORT}/api/v1/device_token
+    volumes:
+    - ./test:/test
+    working_dir: /test
+    entrypoint: ''
+    command: ./test.sh
+    tty: true
+networks:
+  backend:
+    driver: bridge
