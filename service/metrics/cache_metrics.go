@@ -1,3 +1,6 @@
+// Copyright 2025 HP Development Company, L.P.
+// SPDX-License-Identifier: MIT
+
 package metrics
 
 import "github.com/prometheus/client_golang/prometheus"

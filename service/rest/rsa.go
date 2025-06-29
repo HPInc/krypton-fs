@@ -1,3 +1,6 @@
+// Copyright 2025 HP Development Company, L.P.
+// SPDX-License-Identifier: MIT
+
 /*
 This file is from https://github.com/MicahParks/keyfunc
 License: Apache v2.0
