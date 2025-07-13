@@ -1,4 +1,4 @@
-FROM ghcr.io/hpinc/krypton/krypton-go-builder as builder
+FROM ghcr.io/hpinc/krypton/krypton-go-builder AS builder
 
 ADD . /go/src/fs
 WORKDIR /go/src/fs
