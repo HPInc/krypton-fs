@@ -15,7 +15,7 @@ jobs:
         password: ${{ secrets.GHCR_PAT }}
 
     - name: Build & test the FS docker image
-      run: make docker_image ci_test
+      run: make ci_test
 
     - name: Cleanup
       if: always()
