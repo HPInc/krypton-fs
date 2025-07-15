@@ -21,18 +21,14 @@ DOCKER_IMAGE=krypton-fs
 HAS_GO_LINT:=$(shell command -v golint 2> /dev/null)
 HAS_GO_IMPORTS:=$(shell command -v goimports 2>/dev/null)
 
-TESTCLEAN=(make -C test clean)
-
 GHCR=ghcr.io/hpinc
 REPO=krypton
 
 clean:
 	$(GOCLEAN)
-	$(TESTCLEAN)
-	find . -name "*~" -exec rm -f {} \;
-	docker rmi -f $(DOCKER_IMAGE) 2>/dev/null 1>&2
-	docker image prune -f 2>/dev/null 1>&2
-	rm -rf $(BIN)
+	-make -C tools/compose clean
+	-docker rmi -f $(DOCKER_IMAGE) 2>/dev/null 1>&2
+	-rm -rf $(BIN) vendor
 
 tidy:
 	go mod tidy
@@ -42,6 +38,9 @@ fmt:
 
 vet:
 	go vet ./...
+
+vendor:
+	go mod vendor
 
 gosec:
 	gosec ./...

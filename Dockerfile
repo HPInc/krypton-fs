@@ -4,7 +4,7 @@ ADD . /go/src/fs
 WORKDIR /go/src/fs
 
 # build the source
-RUN make tidy build_binaries
+RUN make build_binaries
 
 # use a minimal alpine image for services
 FROM ghcr.io/hpinc/krypton/krypton-go-base
