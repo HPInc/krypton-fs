@@ -59,3 +59,7 @@ check_uploaded_count() {
 new_uuid() {
   cat /proc/sys/kernel/random/uuid
 }
+
+wait_for_server() {
+  krypton-cli util wait_for_server -server "$FS_SERVER_NAME" -port "$FS_PORT" -api_base_path "health" -doc shell
+}

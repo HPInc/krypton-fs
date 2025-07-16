@@ -30,7 +30,7 @@ stop:
 	make -C tools/compose stop
 
 # Create a docker image for the service.
-docker_image:
+docker_image: vendor
 	docker build -t $(DOCKER_IMAGE) .
 
 # Publish the fs docker image to Github.

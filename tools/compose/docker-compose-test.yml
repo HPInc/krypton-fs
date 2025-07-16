@@ -9,6 +9,8 @@ services:
         aliases:
         - ${CLI}.${DOMAIN}
     environment:
+    - FS_SERVER_NAME=${FS}.${DOMAIN}
+    - FS_PORT=${FS_PORT}
     - FS_SERVER=http://${FS}.${DOMAIN}:${FS_PORT}
     - DEVICE_TOKEN_URL=http://${JWT}.${DOMAIN}:${JWT_PORT}/api/v1/device_token
     volumes:

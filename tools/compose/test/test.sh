@@ -45,6 +45,7 @@ get_file_details() {
   krypton-cli fs get_file_details -server "$FS_SERVER" -file_id "$id" -jwt_token $(cat "$DEVICE_TOKEN_FILE")
 }
 
+wait_for_server
 get_device_token
 get_upload_urls
 
